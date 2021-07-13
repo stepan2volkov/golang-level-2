@@ -1,0 +1,17 @@
+name: golangci-lint
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+jobs:
+  golangci-task-1:
+    name: lint-task-1
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v2
+        with:
+          version: v1.29
+          working-directory: task01
