@@ -1,9 +1,11 @@
+// Package panics implements a function for learning panic and recover
 package panics
 
 import (
 	"fmt"
 )
 
+// MakeAndHandlePanic panics and recovers
 func MakeAndHandlePanic() {
 	defer func() {
 		if v := recover(); v != nil {
