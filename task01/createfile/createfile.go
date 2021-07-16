@@ -1,3 +1,6 @@
+// Package createfile implements function which works with
+// package "os". It also demonstrates wrapping error with
+// inculding information about error-time
 package createfile
 
 import (
@@ -5,6 +8,8 @@ import (
 	"os"
 )
 
+// CreateFile creates file or returns an error which type
+// is CreateFileError
 func CreateFile(filepath string) error {
 	file, err := os.Create(filepath)
 	if err != nil {
