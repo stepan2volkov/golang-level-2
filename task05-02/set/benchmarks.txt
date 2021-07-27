@@ -1,0 +1,12 @@
+goos: darwin
+goarch: amd64
+pkg: task05/set
+cpu: Intel(R) Core(TM) i3-1000NG4 CPU @ 1.10GHz
+BenchmarkMutextSetR10W90-4     	    1815	    672163 ns/op	   58786 B/op	     174 allocs/op
+BenchmarkRWMutextSetR10W90-4   	    1299	   1232482 ns/op	  139245 B/op	     435 allocs/op
+BenchmarkMutextSetR50W50-4     	    3301	    502568 ns/op	   19882 B/op	      40 allocs/op
+BenchmarkRWMutextSetR50W50-4   	    1880	    870269 ns/op	   71332 B/op	     279 allocs/op
+BenchmarkMutextSetR90W10-4     	    5188	    397447 ns/op	    5306 B/op	       4 allocs/op
+BenchmarkRWMutextSetR90W10-4   	   32654	     38320 ns/op	     991 B/op	       6 allocs/op
+PASS
+ok  	task05/set	11.017s
