@@ -7,6 +7,9 @@ import (
 	"time"
 )
 
+// 3. Протестируйте производительность операций чтения и записи на множестве действительных чисел,
+// безопасность которого обеспечивается sync.Mutex и sync.RWMutex для разных вариантов использования:
+// 10% запись, 90% чтение; 50% запись, 50% чтение; 90% запись, 10% чтение
 func MutexSetRWTest(s Set, iterNum int, readOps int, writeOps int) {
 	// We will use random numbers for (read from)/(write into) sets
 	rand.Seed(time.Now().Unix())
