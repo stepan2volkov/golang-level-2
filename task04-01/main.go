@@ -2,8 +2,6 @@ package main
 
 import "fmt"
 
-const MAX_NUM = 1000
-
 func sumByStep(firstNumber, secondNumber int) int {
 	values := make(chan int)
 	result := make(chan int)
