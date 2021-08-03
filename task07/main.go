@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"reflect"
 	"strings"
+	"task07/auth"
 )
 
 // Напишите функцию, которая на вход получает запрос SQL и произвольные параметры,
@@ -46,7 +48,21 @@ func prepareSqlStmt(q string, args ...interface{}) (string, []interface{}) {
 }
 
 func main() {
+	// Checking Subtask 01
 	q, args := prepareSqlStmt("SELECT * FROM table WHERE deleted = ? AND id IN(?) AND count < ?", false, []int{1, 6, 234}, 555)
 	fmt.Println(q)
 	fmt.Println(args)
+
+	// Checking Subtask 02
+	user := auth.User{
+		ID:          1,
+		Username:    "TestUser",
+		Email:       "test@email.com",
+		Permissions: []string{"PERM_READ_POST", "PERM_EDIT_POST", "PERM_DELETE_COMMENT"},
+	}
+	userBytes, err := user.MarshalJSON()
+	if err != nil {
+		log.Fatalln(err)
+	}
+	fmt.Println(string(userBytes))
 }

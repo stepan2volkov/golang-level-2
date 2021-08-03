@@ -3,7 +3,7 @@ package auth
 //easyjson:json
 type User struct {
 	ID          int
-	Login       string
+	Username    string
 	Email       string
 	Permissions []string
 }
