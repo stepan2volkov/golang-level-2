@@ -61,13 +61,13 @@ func ScanDir(root string) <-chan []string {
 		go scanDir(wg, dirs, files)
 	}
 
-	queue := make([]string, 1)
-	queue[0] = root
+	dirQueue := make([]string, 1)
+	dirQueue[0] = root
 	dirs <- root
 
-	for len(queue) > 0 {
-		dirpath := queue[0]
-		queue = queue[1:]
+	for len(dirQueue) > 0 {
+		dirpath := dirQueue[0]
+		dirQueue = dirQueue[1:]
 
 		entries, err := os.ReadDir(dirpath)
 		logFatalOnError(err)
@@ -79,7 +79,7 @@ func ScanDir(root string) <-chan []string {
 
 				newDirpath := filepath.Join(dirpath, fi.Name())
 
-				queue = append(queue, newDirpath)
+				dirQueue = append(dirQueue, newDirpath)
 				dirs <- newDirpath
 			}
 		}
