@@ -30,11 +30,8 @@ func main() {
 		if *removeFlag {
 			fmt.Print("Are you sure, that you want to remove all files besides first? (y/N) ")
 			var answer string
-			// fmt.Scan(answer)
-			_, err := fmt.Scanln(&answer)
-			if err != nil {
-				fmt.Println(err)
-			}
+
+			fmt.Scanln(&answer)
 
 			if strings.ToLower(answer) == "y" {
 				for _, f := range duplicateFiles[1:] {
