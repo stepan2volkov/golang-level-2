@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"go.uber.org/zap"
 	"os"
 	"path/filepath"
 	"searchdupl/scan"
@@ -21,7 +22,8 @@ func init() {
 }
 
 func main() {
-	duplicates := scan.ScanDir(*path)
+	logger := zap.NewExample()
+	duplicates := scan.ScanDir(logger, *path)
 	for duplicateFiles := range duplicates {
 		fmt.Printf("[%s] (%d):\n", filepath.Base(duplicateFiles[0]), len(duplicateFiles))
 		for _, duplicateFile := range duplicateFiles {

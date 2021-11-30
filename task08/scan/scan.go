@@ -1,7 +1,7 @@
 package scan
 
 import (
-	"log"
+	"go.uber.org/zap"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -15,21 +15,26 @@ type fileInfoWithPath struct {
 	filepath string
 }
 
-func logFatalOnError(err error) {
+func logFatalOnError(logger *zap.Logger, err error) {
 	if err != nil {
-		log.Fatalln(err)
+		logger.Fatal("fatal error", zap.Error(err))
 	}
 }
 
-func scanDir(wg *sync.WaitGroup, dirs <-chan string, files chan<- fileInfoWithPath) {
+func scanDir(logger *zap.Logger, wg *sync.WaitGroup, dirs <-chan string, files chan<- fileInfoWithPath) {
 	for dir := range dirs {
+		logger.Info("reading dir", zap.String("dir", dir))
+		// panic("test")
 		entries, err := os.ReadDir(dir)
-		logFatalOnError(err)
+		logFatalOnError(logger, err)
 
 		for _, entry := range entries {
 			if !entry.IsDir() {
+				logger.Info("getting info about file",
+					zap.String("filename", entry.Name()),
+					zap.String("filepath", filepath.Join(dir, entry.Name())))
 				info, err := entry.Info()
-				logFatalOnError(err)
+				logFatalOnError(logger, err)
 				files <- fileInfoWithPath{
 					fileInfo{Filename: entry.Name(), Size: info.Size()},
 					filepath.Join(dir, entry.Name()),
@@ -47,7 +52,7 @@ func saveFileInfo(ds *duplicateStore, files <-chan fileInfoWithPath, done chan<-
 	done <- struct{}{}
 }
 
-func ScanDir(root string) <-chan []string {
+func ScanDir(logger *zap.Logger, root string) <-chan []string {
 	wg := &sync.WaitGroup{}
 	dirs := make(chan string, 2*numWorker)
 	files := make(chan fileInfoWithPath, 5*numWorker)
@@ -58,7 +63,7 @@ func ScanDir(root string) <-chan []string {
 
 	for i := 0; i < numWorker; i++ {
 		wg.Add(1)
-		go scanDir(wg, dirs, files)
+		go scanDir(logger, wg, dirs, files)
 	}
 
 	dirQueue := make([]string, 1)
@@ -70,12 +75,12 @@ func ScanDir(root string) <-chan []string {
 		dirQueue = dirQueue[1:]
 
 		entries, err := os.ReadDir(dirpath)
-		logFatalOnError(err)
+		logFatalOnError(logger, err)
 
 		for _, entry := range entries {
 			if entry.IsDir() {
 				fi, err := entry.Info()
-				logFatalOnError(err)
+				logFatalOnError(logger, err)
 
 				newDirpath := filepath.Join(dirpath, fi.Name())
 
